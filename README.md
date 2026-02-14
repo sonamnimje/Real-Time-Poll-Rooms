@@ -119,8 +119,8 @@ By using BOTH mechanisms together:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd Real-Time\ Poll\ Rooms
+   git clone https://github.com/sonamnimje/Real-Time-Poll-Rooms.git
+   cd Real-Time-Poll-Rooms
    ```
 
 2. **Install backend dependencies**
