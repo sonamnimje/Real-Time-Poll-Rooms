@@ -1,4 +1,4 @@
-const API_URL = 'https://real-time-poll-rooms-ffc5.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export async function createPoll(question, options) {
   const response = await fetch(`${API_URL}/api/polls`, {

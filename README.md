@@ -285,6 +285,13 @@ CREATE TABLE votes (
    - Server emits `poll-update` event to all clients in that poll's room
    - All connected clients receive updated vote counts instantly
 4. **Connection status** displayed in UI (Live/Offline badge)
+5. **No page refresh needed** - multiple users can vote simultaneously and see live updates
+
+### Real-Time Architecture
+- **Backend**: FastAPI + python-socketio for WebSocket server
+- **Frontend**: React + socket.io-client for WebSocket client
+- **Communication**: Bidirectional real-time events using Socket.IO protocol
+- **Scalability**: Socket rooms ensure updates are only sent to users viewing the same poll
 
 ## 🎨 API Endpoints
 

@@ -11,14 +11,21 @@ from db import create_poll, get_poll_data, has_user_voted, cast_vote
 
 PORT = int(os.getenv("PORT", "3000"))
 
-origins = [
-    "https://real-time-pollrooms.vercel.app",
-]
+# Allow origins from environment variable or default to development + production
+allowed_origins_env = os.getenv("CORS_ORIGINS", "")
+if allowed_origins_env:
+    origins = [origin.strip() for origin in allowed_origins_env.split(",")]
+else:
+    origins = [
+        "http://localhost:5173",
+        "http://localhost:3000", 
+        "https://real-time-pollrooms.vercel.app",
+    ]
 
 # Socket.IO server
 sio = socketio.AsyncServer(
     async_mode="asgi",
-    cors_allowed_origins=origins
+    cors_allowed_origins="*"  # Allow all origins for WebSocket
 )
 
 app = FastAPI(title="Real-Time Poll Rooms API")
