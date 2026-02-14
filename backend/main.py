@@ -139,25 +139,25 @@ async def vote_endpoint(poll_id: str, payload: VoteRequest, request: Request):
 
 # Socket.IO events
 @sio.event
-def connect(sid, environ):
-    print("Client connected", sid)
+async def connect(sid, environ):
+    print(f"[Socket.IO] Client connected: {sid}")
 
 
 @sio.event
-def disconnect(sid):
-    print("Client disconnected", sid)
+async def disconnect(sid):
+    print(f"[Socket.IO] Client disconnected: {sid}")
 
 
-@sio.event
-def join_poll(sid, poll_id):
-    sio.enter_room(sid, f"poll-{poll_id}")
-    print(f"Socket {sid} joined poll room: {poll_id}")
+@sio.on('join-poll')
+async def on_join_poll(sid, poll_id):
+    await sio.enter_room(sid, f"poll-{poll_id}")
+    print(f"[Socket.IO] Socket {sid} joined poll room: poll-{poll_id}")
 
 
-@sio.event
-def leave_poll(sid, poll_id):
-    sio.leave_room(sid, f"poll-{poll_id}")
-    print(f"Socket {sid} left poll room: {poll_id}")
+@sio.on('leave-poll')
+async def on_leave_poll(sid, poll_id):
+    await sio.leave_room(sid, f"poll-{poll_id}")
+    print(f"[Socket.IO] Socket {sid} left poll room: poll-{poll_id}")
 
 
 # Entry point for uvicorn: main:sio_app
