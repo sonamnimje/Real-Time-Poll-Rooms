@@ -139,25 +139,37 @@ By using BOTH mechanisms together:
 
 4. **Set up environment variables**
    
-   Backend (.env) - Already configured for local development:
+   Backend - Create `.env` file in `backend/` directory:
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+   
+   Default values for local development (already in .env.example):
    ```bash
    PORT=3000
    CORS_ORIGINS=http://localhost:5173,http://localhost:3000
    DB_PATH=./polls.db
    ```
    
-   Frontend (.env) - Already configured for local development:
+   Frontend - Create `.env` file in `frontend/` directory:
+   ```bash
+   cd frontend
+   cp .env.example .env
+   ```
+   
+   Default value for local development (already in .env.example):
    ```bash
    VITE_API_URL=http://localhost:3000
    ```
    
-   **Note:** The `.env` files are already created with default values for local development. You can modify them if needed, but they work out of the box.
+   **Note:** The `.env.example` files contain the default values needed for local development. Simply copy them to create your `.env` files.
 
 5. **Start the backend server**
    ```bash
    cd backend
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   uvicorn main:sio_app --reload --host 0.0.0.0 --port 3000
+   uvicorn main:sio_app --reload --host 127.0.0.1 --port 3000
    # Backend runs on http://localhost:3000
    ```
 

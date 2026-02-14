@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { getPoll, votePoll } from '../api';
 import { getVoterIdentifier } from '../utils';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function ViewPoll() {
   const { pollId } = useParams();
@@ -36,7 +36,7 @@ function ViewPoll() {
     fetchPoll();
 
     // Setup Socket.IO connection
-    socketRef.current = io(SOCKET_URL);
+    socketRef.current = io(API_BASE_URL);
 
     socketRef.current.on('connect', () => {
       console.log('Socket connected');
