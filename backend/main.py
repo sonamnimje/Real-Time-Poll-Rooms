@@ -11,27 +11,21 @@ from db import create_poll, get_poll_data, has_user_voted, cast_vote
 
 PORT = int(os.getenv("PORT", "3000"))
 
-_origins_env = os.getenv("FRONTEND_ORIGINS")
-FRONTEND_ORIGINS = (
-    [origin.strip() for origin in _origins_env.split(",") if origin.strip()]
-    if _origins_env
-    else [
-        "http://localhost:5173",  # local frontend
-        "https://your-frontend-name.vercel.app",  # production frontend
-    ]
-)
+origins = [
+    "https://real-time-pollrooms.vercel.app",
+]
 
 # Socket.IO server
 sio = socketio.AsyncServer(
     async_mode="asgi",
-    cors_allowed_origins=FRONTEND_ORIGINS or ["*"]
+    cors_allowed_origins=origins
 )
 
 app = FastAPI(title="Real-Time Poll Rooms API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=FRONTEND_ORIGINS or ["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
