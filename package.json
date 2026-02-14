@@ -1,0 +1,24 @@
+{
+  "name": "real-time-poll-rooms",
+  "version": "1.0.0",
+  "description": "A real-time polling application with WebSocket support",
+  "scripts": {
+    "install-all": "cd backend && pip install -r requirements.txt && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && uvicorn main:sio_app --reload --host 0.0.0.0 --port 3000\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix frontend",
+    "start": "cd backend && uvicorn main:sio_app --host 0.0.0.0 --port 3000"
+  },
+  "keywords": [
+    "poll",
+    "real-time",
+    "websocket",
+    "socket.io",
+    "react",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
