@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { getPoll, votePoll } from '../api';
 import { getVoterIdentifier } from '../utils';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const SOCKET_URL = 'wss://real-time-poll-rooms-ffc5.onrender.com';
 
 function ViewPoll() {
   const { pollId } = useParams();
