@@ -139,25 +139,25 @@ By using BOTH mechanisms together:
 
 4. **Set up environment variables**
    
-   Backend (.env):
+   Backend (.env) - Already configured for local development:
    ```bash
-   cd ../backend
-   cp .env.example .env
-   # Edit .env if needed
+   PORT=3000
+   CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+   DB_PATH=./polls.db
    ```
    
-   Frontend (.env):
+   Frontend (.env) - Already configured for local development:
    ```bash
-   cd ../frontend
-   cp .env.example .env
-   # Edit VITE_API_URL if backend is on different host
+   VITE_API_URL=http://localhost:3000
    ```
+   
+   **Note:** The `.env` files are already created with default values for local development. You can modify them if needed, but they work out of the box.
 
 5. **Start the backend server**
    ```bash
-   cd ../backend
+   cd backend
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   uvicorn main:sio_app --reload --host 127.0.0.1 --port 3000
+   uvicorn main:sio_app --reload --host 0.0.0.0 --port 3000
    # Backend runs on http://localhost:3000
    ```
 
@@ -170,6 +170,8 @@ By using BOTH mechanisms together:
 
 7. **Open the application**
    - Navigate to http://localhost:5173 in your browser
+   - The "Live" badge indicates WebSocket connection is active
+   - Open the same poll in multiple browser tabs/windows to see real-time updates!
 
 ## 🐳 Docker Deployment
 
@@ -207,13 +209,14 @@ docker run -p 80:80 poll-frontend
    - Connect your GitHub repository
    - Set the root directory to `/backend`
    - Use Python builder; start command: `uvicorn main:sio_app --host 0.0.0.0 --port $PORT`
+   - Add environment variable: `CORS_ORIGINS=https://your-frontend-url.vercel.app`
    - Note the generated URL (e.g., `https://your-app.railway.app`)
 
 2. **Frontend Deployment**
    - Deploy to [Vercel](https://vercel.com) or [Netlify](https://netlify.com)
    - Set build command: `npm run build`
    - Set output directory: `dist`
-   - Add environment variable: `VITE_API_URL=https://your-backend-url`
+   - Add environment variable: `VITE_API_URL=https://your-backend-url.railway.app`
    - Update CORS settings in backend to allow your frontend domain
 
 3. **Environment Variables**
@@ -221,8 +224,7 @@ docker run -p 80:80 poll-frontend
    Backend (Railway):
    ```
    PORT=3000
-   CLIENT_URL=https://your-frontend-url.vercel.app
-   NODE_ENV=production
+   CORS_ORIGINS=https://your-frontend-url.vercel.app
    ```
    
    Frontend (Vercel):

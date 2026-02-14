@@ -25,7 +25,7 @@ else:
 # Socket.IO server
 sio = socketio.AsyncServer(
     async_mode="asgi",
-    cors_allowed_origins="*"  # Allow all origins for WebSocket
+    cors_allowed_origins=origins  # Use the same origins as HTTP CORS
 )
 
 app = FastAPI(title="Real-Time Poll Rooms API")
