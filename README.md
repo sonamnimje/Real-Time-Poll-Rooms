@@ -14,7 +14,7 @@ A modern, real-time polling web application that allows users to create polls, s
 
 ## 🚀 Live Demo
 
-**Public URL**: [To be deployed]
+**Public URL**: https://real-time-pollrooms.vercel.app/
 
 ## 🛠️ Technology Stack
 
