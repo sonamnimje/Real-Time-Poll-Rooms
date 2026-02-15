@@ -248,8 +248,7 @@ Real-Time Poll Rooms/
 
 For questions or issues:
 1. Check README.md
-2. Review DEPLOYMENT.md
-3. Check common issues section
+2. Check common issues section
 
 ---
 
