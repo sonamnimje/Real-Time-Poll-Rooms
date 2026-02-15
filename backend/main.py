@@ -11,9 +11,19 @@ from db import create_poll, get_poll_data, has_user_voted, cast_vote
 
 PORT = int(os.getenv("PORT", "3000"))
 
-origins = [
-    "https://real-time-pollrooms.vercel.app",
-]
+def _origin_list() -> list[str]:
+    env_val = os.getenv("CLIENT_URLS", "")
+    if env_val:
+        return [o.strip() for o in env_val.split(",") if o.strip()]
+    return [
+        "*",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
+
+origins = _origin_list()
 
 # Socket.IO server
 sio = socketio.AsyncServer(

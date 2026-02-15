@@ -4,7 +4,8 @@ import { io } from 'socket.io-client';
 import { getPoll, votePoll } from '../api';
 import { getVoterIdentifier } from '../utils';
 
-const SOCKET_URL = 'wss://real-time-poll-rooms-ffc5.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || window.location.origin;
+const SOCKET_URL = API_URL;
 
 function ViewPoll() {
   const { pollId } = useParams();
@@ -36,12 +37,15 @@ function ViewPoll() {
     fetchPoll();
 
     // Setup Socket.IO connection
-    socketRef.current = io(SOCKET_URL);
+    socketRef.current = io(SOCKET_URL, {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
 
     socketRef.current.on('connect', () => {
       console.log('Socket connected');
       setConnected(true);
-      socketRef.current.emit('join-poll', pollId);
+      socketRef.current.emit('join_poll', pollId);
     });
 
     socketRef.current.on('disconnect', () => {
@@ -57,7 +61,7 @@ function ViewPoll() {
     // Cleanup
     return () => {
       if (socketRef.current) {
-        socketRef.current.emit('leave-poll', pollId);
+        socketRef.current.emit('leave_poll', pollId);
         socketRef.current.disconnect();
       }
     };

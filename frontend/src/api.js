@@ -1,50 +1,78 @@
-const API_URL = 'https://real-time-poll-rooms-ffc5.onrender.com';
+// Prefer env override, fall back to same origin to keep backend/frontend in sync
+const API_URL = import.meta.env.VITE_API_URL || window.location.origin;
+
+async function parseJsonSafe(response) {
+  try {
+    return await response.json();
+  } catch (err) {
+    return null; // Empty or non-JSON body
+  }
+}
+
+async function parseTextSafe(response) {
+  try {
+    return await response.text();
+  } catch (err) {
+    return null;
+  }
+}
+
+async function handleResponse(response, fallbackMessage) {
+  const data = await parseJsonSafe(response);
+  const textFallback = data ? null : await parseTextSafe(response);
+  if (!response.ok) {
+    const message =
+      (data && (data.error || data.detail)) ||
+      (textFallback && textFallback.trim()) ||
+      `${fallbackMessage} (HTTP ${response.status})`;
+    throw new Error(message);
+  }
+  return data;
+}
 
 export async function createPoll(question, options) {
-  const response = await fetch(`${API_URL}/api/polls`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ question, options }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/api/polls`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question, options }),
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to create poll');
+    return await handleResponse(response, 'Failed to create poll');
+  } catch (err) {
+    // Network or parsing error
+    throw new Error(err.message || 'Network error while creating poll');
   }
-
-  return response.json();
 }
 
 export async function getPoll(pollId, voterIdentifier) {
-  const response = await fetch(`${API_URL}/api/polls/${pollId}`, {
-    headers: {
-      'X-Voter-Id': voterIdentifier,
-    },
-  });
+  try {
+    const response = await fetch(`${API_URL}/api/polls/${pollId}`, {
+      headers: {
+        'X-Voter-Id': voterIdentifier,
+      },
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to fetch poll');
+    return await handleResponse(response, 'Failed to fetch poll');
+  } catch (err) {
+    throw new Error(err.message || 'Network error while fetching poll');
   }
-
-  return response.json();
 }
 
 export async function votePoll(pollId, optionId, voterIdentifier) {
-  const response = await fetch(`${API_URL}/api/polls/${pollId}/vote`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ optionId, voterIdentifier }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/api/polls/${pollId}/vote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ optionId, voterIdentifier }),
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to vote');
+    return await handleResponse(response, 'Failed to vote');
+  } catch (err) {
+    throw new Error(err.message || 'Network error while voting');
   }
-
-  return response.json();
 }
